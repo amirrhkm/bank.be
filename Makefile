@@ -10,4 +10,10 @@ dbcreate:
 dbdrop:
 	docker exec -it bank-db dropdb bank
 
-.PHONY: dbup dbdown createdb dropdb
+dbmigrateup:
+	migrate -path db/migration -database "postgresql://root:password@localhost:5432/bank?sslmode=disable" -verbose up
+
+dbmigratedown:
+	migrate -path db/migration -database "postgresql://root:password@localhost:5432/bank?sslmode=disable" -verbose down
+
+.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown
