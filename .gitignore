@@ -1,2 +1,2 @@
-# sqlc generated files
-/db/sqlc
+# go mod cache
+go.sum
