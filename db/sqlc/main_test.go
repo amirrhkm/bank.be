@@ -17,18 +17,20 @@ const (
 )
 
 var testQueries *Queries
+var testDB *sql.DB
 
 /*
  * Unit Tests Prerequisite:
  * Ensure database `bank-test` is created and migrated
  */
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	var err error
+	testDB, err = sql.Open(dbDriver, dbSource)
 	if err != nil {
 		log.Fatal("Failed connecting to db:", err)
 	}
 
-	testQueries = New(conn)
+	testQueries = New(testDB)
 
 	os.Exit(m.Run())
 }
