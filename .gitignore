@@ -1,2 +1,5 @@
 # go mod cache
 go.sum
+
+# test coverage
+coverage.out

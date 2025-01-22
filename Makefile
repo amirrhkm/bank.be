@@ -31,7 +31,11 @@ testdbmigratedown:
 test:
 	go test -v -cover ./...
 
+testcoverage:
+	go test -coverprofile=coverage.out ./...
+	go tool cover -html=coverage.out
+
 sqlc:
 	sqlc generate
 
-.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc
+.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc test testcoverage
