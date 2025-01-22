@@ -31,7 +31,7 @@ testdbmigratedown:
 test:
 	go test -v -cover ./...
 
-testcoverage:
+testreport:
 	go test -coverprofile=coverage.out ./...
 	go tool cover -html=coverage.out
 
