@@ -38,6 +38,9 @@ jobs:
       - name: Checkout into Go Module
         uses: actions/checkout@v2
 
+      - name: Download Go Dependencies
+        run: go mod download
+
       - name: Install golang-migrate CLI
         run: |
           curl -L https://github.com/golang-migrate/migrate/releases/download/v4.18.1/migrate.linux-amd64.tar.gz -o migrate.tar.gz
