@@ -39,7 +39,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Download Go Dependencies
-        run: go mod download
+        run: |
+          go get -t ./...
+          go mod tidy
 
       - name: Install golang-migrate CLI
         run: |
