@@ -41,3 +41,11 @@ func RandomCurrency() string {
 	n := len(currencies)
 	return currencies[rand.Intn(n)]
 }
+
+func RandomOperation(amount int64) int64 {
+	random := rand.Int63n(2)
+	if random == 1 {
+		return amount * -1
+	}
+	return amount
+}

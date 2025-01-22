@@ -10,71 +10,92 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func createRandomAccount(t *testing.T) Accounts {
+func createTestAccount(owner string, balance int64, currency string) (Accounts, error) {
 	arg := CreateAccountParams{
-		Owner:    util.RandomOwner(),
-		Balance:  util.RandomMoney(),
-		Currency: util.RandomCurrency(),
+		Owner:    owner,
+		Balance:  balance,
+		Currency: currency,
 	}
 
 	account, err := testQueries.CreateAccount(context.Background(), arg)
 
+	return account, err
+}
+
+func TestCreateAccount(t *testing.T) {
+	owner := util.RandomOwner()
+	balance := util.RandomMoney()
+	currency := util.RandomCurrency()
+
+	account, err := createTestAccount(owner, balance, currency)
+
 	require.NoError(t, err)
 	require.NotEmpty(t, account)
-	require.Equal(t, arg.Owner, account.Owner)
-	require.Equal(t, arg.Balance, account.Balance)
-	require.Equal(t, arg.Currency, account.Currency)
+	require.Equal(t, owner, account.Owner)
+	require.Equal(t, balance, account.Balance)
+	require.Equal(t, currency, account.Currency)
 	require.NotZero(t, account.ID)
 	require.NotZero(t, account.CreatedAt)
-
-	return account
 }
 
 func TestGetAccount(t *testing.T) {
-	account1 := createRandomAccount(t)
-	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
+	owner := util.RandomOwner()
+	balance := util.RandomMoney()
+	currency := util.RandomCurrency()
+
+	account, err := createTestAccount(owner, balance, currency)
+	response, err := testQueries.GetAccount(context.Background(), account.ID)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, account2)
-	require.Equal(t, account1.ID, account2.ID)
-	require.Equal(t, account1.Owner, account2.Owner)
-	require.Equal(t, account1.Balance, account2.Balance)
-	require.Equal(t, account1.Currency, account2.Currency)
-	require.WithinDuration(t, account1.CreatedAt, account2.CreatedAt, time.Second)
+	require.NotEmpty(t, response)
+	require.Equal(t, account.ID, response.ID)
+	require.Equal(t, account.Owner, response.Owner)
+	require.Equal(t, account.Balance, response.Balance)
+	require.Equal(t, account.Currency, response.Currency)
+	require.WithinDuration(t, account.CreatedAt, response.CreatedAt, time.Second)
 }
 
 func TestUpdateAccount(t *testing.T) {
-	account1 := createRandomAccount(t)
+	owner := util.RandomOwner()
+	balance := util.RandomMoney()
+	currency := util.RandomCurrency()
+
+	account, err := createTestAccount(owner, balance, currency)
 
 	arg := UpdateAccountParams{
-		ID:      account1.ID,
+		ID:      account.ID,
 		Balance: util.RandomMoney(),
 	}
 
-	account2, err := testQueries.UpdateAccount(context.Background(), arg)
+	response, err := testQueries.UpdateAccount(context.Background(), arg)
 
 	require.NoError(t, err)
-	require.NotEmpty(t, account2)
-	require.Equal(t, account1.ID, account2.ID)
-	require.Equal(t, arg.Balance, account2.Balance)
-	require.Equal(t, account1.Currency, account2.Currency)
-	require.WithinDuration(t, account1.CreatedAt, account2.CreatedAt, time.Second)
+	require.NotEmpty(t, response)
+	require.Equal(t, account.ID, response.ID)
+	require.Equal(t, arg.Balance, response.Balance)
+	require.Equal(t, account.Currency, response.Currency)
+	require.WithinDuration(t, account.CreatedAt, response.CreatedAt, time.Second)
 }
 
 func TestDeleteAccount(t *testing.T) {
-	account1 := createRandomAccount(t)
-	err := testQueries.DeleteAccount(context.Background(), account1.ID)
+	owner := util.RandomOwner()
+	balance := util.RandomMoney()
+	currency := util.RandomCurrency()
+
+	account, err := createTestAccount(owner, balance, currency)
+
+	err = testQueries.DeleteAccount(context.Background(), account.ID)
 	require.NoError(t, err)
 
-	account2, err := testQueries.GetAccount(context.Background(), account1.ID)
+	response, err := testQueries.GetAccount(context.Background(), account.ID)
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
-	require.Empty(t, account2)
+	require.Empty(t, response)
 }
 
 func TestListAccounts(t *testing.T) {
 	for i := 0; i < 10; i++ {
-		createRandomAccount(t)
+		createTestAccount(util.RandomOwner(), util.RandomMoney(), util.RandomCurrency())
 	}
 
 	arg := ListAccountsParams{

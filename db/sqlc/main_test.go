@@ -6,7 +6,9 @@ import (
 	"os"
 	"testing"
 
+	"github.com/amirrhkm/bank.be/util"
 	_ "github.com/lib/pq"
+	"github.com/stretchr/testify/require"
 )
 
 const (
@@ -29,4 +31,17 @@ func TestMain(m *testing.M) {
 	testQueries = New(conn)
 
 	os.Exit(m.Run())
+}
+
+func createRandomAccount(t *testing.T) Accounts {
+	owner := util.RandomOwner()
+	balance := util.RandomMoney()
+	currency := util.RandomCurrency()
+
+	account, err := createTestAccount(owner, balance, currency)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, account)
+
+	return account
 }
