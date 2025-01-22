@@ -148,6 +148,6 @@ func TestTransferDeadlockTx(t *testing.T) {
 	require.NoError(t, err)
 
 	fmt.Println(">> after:", updatedAccount1.Balance, updatedAccount2.Balance)
-	//require.Equal(t, account1.Balance, updatedAccount1.Balance)
-	//require.Equal(t, account2.Balance, updatedAccount2.Balance)
+	require.Equal(t, account1.Balance, updatedAccount1.Balance)
+	require.Equal(t, account2.Balance, updatedAccount2.Balance)
 }
