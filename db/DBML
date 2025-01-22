@@ -21,7 +21,7 @@ Table entries {
   }
 }
 
-Table transfer {
+Table transfers {
   id bigserial [pk]
   from_account_id bigint [ref: > A.id]
   to_account_id bigint [ref: > A.id]
