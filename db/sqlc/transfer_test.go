@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 	"testing"
 
 	"github.com/amirrhkm/bank.be/util"
@@ -11,8 +10,8 @@ import (
 
 func createTestTransfer(fromAccountID int64, toAccountID int64, amount int64) (Transfers, error) {
 	arg := CreateTransferParams{
-		FromAccountID: sql.NullInt64{Int64: fromAccountID, Valid: true},
-		ToAccountID:   sql.NullInt64{Int64: toAccountID, Valid: true},
+		FromAccountID: fromAccountID,
+		ToAccountID:   toAccountID,
 		Amount:        amount,
 	}
 
@@ -30,8 +29,8 @@ func TestCreateTransfer(t *testing.T) {
 
 	require.NoError(t, err)
 	require.NotEmpty(t, transfer)
-	require.Equal(t, account1.ID, transfer.FromAccountID.Int64)
-	require.Equal(t, account2.ID, transfer.ToAccountID.Int64)
+	require.Equal(t, account1.ID, transfer.FromAccountID)
+	require.Equal(t, account2.ID, transfer.ToAccountID)
 	require.Equal(t, amount, transfer.Amount)
 	require.NotZero(t, transfer.ID)
 	require.NotZero(t, transfer.CreatedAt)
@@ -62,8 +61,8 @@ func TestListTransfers(t *testing.T) {
 	}
 
 	arg := ListTransfersParams{
-		FromAccountID: sql.NullInt64{Int64: account1.ID, Valid: true},
-		ToAccountID:   sql.NullInt64{Int64: account2.ID, Valid: true},
+		FromAccountID: account1.ID,
+		ToAccountID:   account2.ID,
 		Limit:         5,
 		Offset:        5,
 	}
