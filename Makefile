@@ -38,4 +38,7 @@ testreport:
 sqlc:
 	sqlc generate
 
-.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc test testcoverage
+server:
+	go run main.go
+
+.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc test testcoverage server
