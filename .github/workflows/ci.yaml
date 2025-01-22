@@ -51,7 +51,7 @@ jobs:
           which migrate
 
       - name: Migrate DB
-        run: make dbmigrateup
+        run: make testdbmigrateup
 
       - name: Test
         run: make test
