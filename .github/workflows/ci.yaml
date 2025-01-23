@@ -38,6 +38,10 @@ jobs:
       - name: Checkout into Go Module
         uses: actions/checkout@v2
 
+      - name: Load environment variables
+        run: |
+          export $(cat app.env | xargs)
+
       - name: Download Go Dependencies
         run: |
           go get -t ./...
