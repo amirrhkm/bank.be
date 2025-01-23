@@ -34,8 +34,23 @@ func TestMain(m *testing.M) {
 	os.Exit(m.Run())
 }
 
+func createRandomUser(t *testing.T) Users {
+	username := util.RandomOwner()
+	hashedPassword := util.RandomString(12)
+	fullName := util.RandomOwner()
+	email := username + "@test.com"
+
+	user, err := createTestUser(username, hashedPassword, fullName, email)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, user)
+
+	return user
+}
+
 func createRandomAccount(t *testing.T) Accounts {
-	owner := util.RandomOwner()
+	user := createRandomUser(t)
+	owner := user.Username
 	balance := util.RandomMoney()
 	currency := util.RandomCurrency()
 
