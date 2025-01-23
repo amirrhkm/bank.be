@@ -38,10 +38,6 @@ jobs:
       - name: Checkout into Go Module
         uses: actions/checkout@v2
 
-      - name: Load environment variables
-        run: |
-          export $(cat app.env | xargs)
-
       - name: Download Go Dependencies
         run: |
           go get -t ./...
@@ -53,6 +49,15 @@ jobs:
           tar xvz -f migrate.tar.gz
           sudo mv migrate /usr/bin/migrate
           which migrate
+
+      - name: Create config file
+        run: |
+          cat > app.env <<EOF
+          DB_DRIVER=postgres
+          DB_SOURCE=postgresql://root:password@localhost:5432/bank?sslmode=disable
+          TEST_DB_SOURCE=postgresql://root:password@localhost:5432/bank-test?sslmode=disable
+          SERVER_ADDRESS=0.0.0.0:8080
+          EOF
 
       - name: Migrate DB
         run: make testdbmigrateup
