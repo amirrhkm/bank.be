@@ -23,7 +23,8 @@ func createTestAccount(owner string, balance int64, currency string) (Accounts, 
 }
 
 func TestCreateAccount(t *testing.T) {
-	owner := util.RandomOwner()
+	user := createRandomUser(t)
+	owner := user.Username
 	balance := util.RandomMoney()
 	currency := util.RandomCurrency()
 
@@ -39,7 +40,8 @@ func TestCreateAccount(t *testing.T) {
 }
 
 func TestGetAccount(t *testing.T) {
-	owner := util.RandomOwner()
+	user := createRandomUser(t)
+	owner := user.Username
 	balance := util.RandomMoney()
 	currency := util.RandomCurrency()
 
@@ -56,7 +58,8 @@ func TestGetAccount(t *testing.T) {
 }
 
 func TestUpdateAccount(t *testing.T) {
-	owner := util.RandomOwner()
+	user := createRandomUser(t)
+	owner := user.Username
 	balance := util.RandomMoney()
 	currency := util.RandomCurrency()
 
@@ -78,7 +81,8 @@ func TestUpdateAccount(t *testing.T) {
 }
 
 func TestDeleteAccount(t *testing.T) {
-	owner := util.RandomOwner()
+	user := createRandomUser(t)
+	owner := user.Username
 	balance := util.RandomMoney()
 	currency := util.RandomCurrency()
 
