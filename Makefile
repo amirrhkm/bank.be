@@ -41,4 +41,7 @@ sqlc:
 server:
 	go run main.go
 
-.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc test testcoverage server
+mock:
+	mockgen -package mockdb -destination db/sqlc/store.go github.com/amirrhkm/bank.be/db/sqlc Store
+
+.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc test testcoverage server mock
