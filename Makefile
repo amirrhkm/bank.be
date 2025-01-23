@@ -13,8 +13,14 @@ dbdrop:
 dbmigrateup:
 	migrate -path db/migration -database "postgresql://root:password@localhost:5432/bank?sslmode=disable" -verbose up
 
+dbmigrateup1:
+	migrate -path db/migration -database "postgresql://root:password@localhost:5432/bank?sslmode=disable" -verbose up 1
+
 dbmigratedown:
 	migrate -path db/migration -database "postgresql://root:password@localhost:5432/bank?sslmode=disable" -verbose down
+
+dbmigratedown1:
+	migrate -path db/migration -database "postgresql://root:password@localhost:5432/bank?sslmode=disable" -verbose down 1
 
 testdbcreate:
 	docker exec -it bank-db createdb --username=root --owner=root bank-test
@@ -44,4 +50,4 @@ server:
 mock:
 	mockgen -package mockdb -destination db/mock/store.go github.com/amirrhkm/bank.be/db/sqlc Store
 
-.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigratedown sqlc test testcoverage server mock
+.PHONY: dbup dbdown createdb dropdb dbmigrateup dbmigrateup1 dbmigratedown dbmigratedown1 sqlc test testcoverage server mock
