@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"database/sql"
+	"sort"
 	"testing"
 	"time"
 
@@ -98,9 +99,27 @@ func TestDeleteAccount(t *testing.T) {
 }
 
 func TestListAccounts(t *testing.T) {
+	_, err := testDB.Exec("DELETE FROM entries")
+	require.NoError(t, err)
+	_, err = testDB.Exec("DELETE FROM transfers")
+	require.NoError(t, err)
+	_, err = testDB.Exec("DELETE FROM accounts")
+	require.NoError(t, err)
+	_, err = testDB.Exec("DELETE FROM users")
+	require.NoError(t, err)
+
+	var accountIDs []int64
 	for i := 0; i < 10; i++ {
-		createTestAccount(util.RandomOwner(), util.RandomMoney(), util.RandomCurrency())
+		user := createRandomUser(t)
+		account, err := createTestAccount(user.Username, util.RandomMoney(), util.RandomCurrency())
+		require.NoError(t, err)
+		require.NotEmpty(t, account)
+		accountIDs = append(accountIDs, account.ID)
 	}
+
+	sort.Slice(accountIDs, func(i, j int) bool {
+		return accountIDs[i] < accountIDs[j]
+	})
 
 	arg := ListAccountsParams{
 		Limit:  5,
@@ -111,7 +130,10 @@ func TestListAccounts(t *testing.T) {
 	require.NoError(t, err)
 	require.Len(t, accounts, 5)
 
-	for _, account := range accounts {
+	for i, account := range accounts {
 		require.NotEmpty(t, account)
+		expectedID := accountIDs[i+5]
+		require.Equal(t, expectedID, account.ID,
+			"Account at position %d has ID %d, expected %d", i, account.ID, expectedID)
 	}
 }
