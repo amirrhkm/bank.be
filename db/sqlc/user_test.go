@@ -23,8 +23,10 @@ func createTestUser(username string, hashedPassword string, fullName string, ema
 }
 
 func TestCreateUser(t *testing.T) {
+	hashedPassword, err := util.HashPassword(util.RandomString(12))
+	require.NoError(t, err)
+
 	username := util.RandomOwner()
-	hashedPassword := util.RandomString(12)
 	fullName := util.RandomOwner()
 	email := username + "@test.com"
 
@@ -41,8 +43,10 @@ func TestCreateUser(t *testing.T) {
 }
 
 func TestGetUser(t *testing.T) {
+	hashedPassword, err := util.HashPassword(util.RandomString(12))
+	require.NoError(t, err)
+
 	username := util.RandomOwner()
-	hashedPassword := util.RandomString(12)
 	fullName := util.RandomOwner()
 	email := username + "@test.com"
 
