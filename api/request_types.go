@@ -1,5 +1,7 @@
 package api
 
+import "time"
+
 type createAccountRequest struct {
 	Owner    string `json:"owner" binding:"required"`
 	Currency string `json:"currency" binding:"required,currency"`
@@ -19,4 +21,19 @@ type createTransferRequest struct {
 	ToAccountID   int64  `json:"to_account_id" binding:"required,min=1"`
 	Amount        int64  `json:"amount" binding:"required,gt=0"`
 	Currency      string `json:"currency" binding:"required,currency"`
+}
+
+type createUserRequest struct {
+	Username string `json:"username" binding:"required,alphanum"`
+	Password string `json:"password" binding:"required,min=6"`
+	FullName string `json:"full_name" binding:"required"`
+	Email    string `json:"email" binding:"required,email"`
+}
+
+type createUserResponse struct {
+	Username          string    `json:"username"`
+	FullName          string    `json:"full_name"`
+	Email             string    `json:"email"`
+	PasswordChangedAt time.Time `json:"password_changed_at"`
+	CreatedAt         time.Time `json:"created_at"`
 }
